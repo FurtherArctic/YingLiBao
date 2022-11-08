@@ -1,16 +1,20 @@
 package com.bjpowernode.db.domain;
 
+import com.baomidou.mybatisplus.annotation.TableName;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
 /**
  * 充值记录表
+ *
  * @TableName b_recharge_record
  */
+@TableName("b_recharge_record")
 public class RechargeRecordDO implements Serializable {
     /**
-     * 
+     *
      */
     private Integer id;
 
@@ -52,14 +56,14 @@ public class RechargeRecordDO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 
+     *
      */
     public Integer getId() {
         return id;
     }
 
     /**
-     * 
+     *
      */
     public void setId(Integer id) {
         this.id = id;
@@ -176,13 +180,13 @@ public class RechargeRecordDO implements Serializable {
         }
         RechargeRecordDO other = (RechargeRecordDO) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getUid() == null ? other.getUid() == null : this.getUid().equals(other.getUid()))
-            && (this.getRechargeNo() == null ? other.getRechargeNo() == null : this.getRechargeNo().equals(other.getRechargeNo()))
-            && (this.getRechargeStatus() == null ? other.getRechargeStatus() == null : this.getRechargeStatus().equals(other.getRechargeStatus()))
-            && (this.getRechargeMoney() == null ? other.getRechargeMoney() == null : this.getRechargeMoney().equals(other.getRechargeMoney()))
-            && (this.getRechargeTime() == null ? other.getRechargeTime() == null : this.getRechargeTime().equals(other.getRechargeTime()))
-            && (this.getRechargeDesc() == null ? other.getRechargeDesc() == null : this.getRechargeDesc().equals(other.getRechargeDesc()))
-            && (this.getChannel() == null ? other.getChannel() == null : this.getChannel().equals(other.getChannel()));
+                && (this.getUid() == null ? other.getUid() == null : this.getUid().equals(other.getUid()))
+                && (this.getRechargeNo() == null ? other.getRechargeNo() == null : this.getRechargeNo().equals(other.getRechargeNo()))
+                && (this.getRechargeStatus() == null ? other.getRechargeStatus() == null : this.getRechargeStatus().equals(other.getRechargeStatus()))
+                && (this.getRechargeMoney() == null ? other.getRechargeMoney() == null : this.getRechargeMoney().equals(other.getRechargeMoney()))
+                && (this.getRechargeTime() == null ? other.getRechargeTime() == null : this.getRechargeTime().equals(other.getRechargeTime()))
+                && (this.getRechargeDesc() == null ? other.getRechargeDesc() == null : this.getRechargeDesc().equals(other.getRechargeDesc()))
+                && (this.getChannel() == null ? other.getChannel() == null : this.getChannel().equals(other.getChannel()));
     }
 
     @Override

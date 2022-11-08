@@ -1,5 +1,6 @@
 package com.bjpowernode.db.mapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.bjpowernode.db.domain.FinanceAccountDO;
 
 /**
@@ -8,7 +9,7 @@ import com.bjpowernode.db.domain.FinanceAccountDO;
 * @createDate 2022-11-07 19:12:53
 * @Entity com.bjpowernode.db.domain.FinanceAccount
 */
-public interface FinanceAccountMapper {
+public interface FinanceAccountMapper extends BaseMapper<FinanceAccountDO> {
 
     int deleteByPrimaryKey(Long id);
 

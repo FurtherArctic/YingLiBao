@@ -1,5 +1,6 @@
 package com.bjpowernode.db.mapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.bjpowernode.db.domain.RechargeRecordDO;
 
 /**
@@ -8,7 +9,7 @@ import com.bjpowernode.db.domain.RechargeRecordDO;
 * @createDate 2022-11-07 19:12:38
 * @Entity com.bjpowernode.db.domain.RechargeRecord
 */
-public interface RechargeRecordMapper {
+public interface RechargeRecordMapper extends BaseMapper<RechargeRecordDO> {
 
     int deleteByPrimaryKey(Long id);
 

@@ -1,13 +1,17 @@
 package com.bjpowernode.db.domain;
 
+import com.baomidou.mybatisplus.annotation.TableName;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
 /**
  * 投资记录表
+ *
  * @TableName b_bid_info
  */
+@TableName(value = "b_bid_info")
 public class BidInfoDO implements Serializable {
     /**
      * 投标记录ID
@@ -138,11 +142,11 @@ public class BidInfoDO implements Serializable {
         }
         BidInfoDO other = (BidInfoDO) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getProdId() == null ? other.getProdId() == null : this.getProdId().equals(other.getProdId()))
-            && (this.getUid() == null ? other.getUid() == null : this.getUid().equals(other.getUid()))
-            && (this.getBidMoney() == null ? other.getBidMoney() == null : this.getBidMoney().equals(other.getBidMoney()))
-            && (this.getBidTime() == null ? other.getBidTime() == null : this.getBidTime().equals(other.getBidTime()))
-            && (this.getBidStatus() == null ? other.getBidStatus() == null : this.getBidStatus().equals(other.getBidStatus()));
+                && (this.getProdId() == null ? other.getProdId() == null : this.getProdId().equals(other.getProdId()))
+                && (this.getUid() == null ? other.getUid() == null : this.getUid().equals(other.getUid()))
+                && (this.getBidMoney() == null ? other.getBidMoney() == null : this.getBidMoney().equals(other.getBidMoney()))
+                && (this.getBidTime() == null ? other.getBidTime() == null : this.getBidTime().equals(other.getBidTime()))
+                && (this.getBidStatus() == null ? other.getBidStatus() == null : this.getBidStatus().equals(other.getBidStatus()));
     }
 
     @Override

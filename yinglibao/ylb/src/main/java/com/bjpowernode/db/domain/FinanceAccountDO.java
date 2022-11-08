@@ -1,5 +1,7 @@
 package com.bjpowernode.db.domain;
 
+import com.baomidou.mybatisplus.annotation.TableName;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -7,6 +9,7 @@ import java.math.BigDecimal;
  * 用户财务资金账户表
  * @TableName u_finance_account
  */
+@TableName("u_finance_account")
 public class FinanceAccountDO implements Serializable {
     /**
      * 

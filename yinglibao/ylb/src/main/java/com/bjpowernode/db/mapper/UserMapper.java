@@ -1,6 +1,9 @@
 package com.bjpowernode.db.mapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.bjpowernode.db.domain.UserDO;
+import com.bjpowernode.web.struct.dto.BaseInfoDTO;
+import org.springframework.stereotype.Component;
 
 /**
 * @author wangj
@@ -8,7 +11,8 @@ import com.bjpowernode.db.domain.UserDO;
 * @createDate 2022-11-07 19:12:53
 * @Entity com.bjpowernode.db.domain.User
 */
-public interface UserMapper {
+@Component
+public interface UserMapper extends BaseMapper<UserDO> {
 
     int deleteByPrimaryKey(Long id);
 
@@ -22,4 +26,5 @@ public interface UserMapper {
 
     int updateByPrimaryKey(UserDO record);
 
+    Long selectUserCounts();
 }

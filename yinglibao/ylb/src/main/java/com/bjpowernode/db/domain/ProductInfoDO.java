@@ -1,16 +1,20 @@
 package com.bjpowernode.db.domain;
 
+import com.baomidou.mybatisplus.annotation.TableName;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
 /**
  * 产品信息表
+ *
  * @TableName b_product_info
  */
+@TableName(value = "b_product_info")
 public class ProductInfoDO implements Serializable {
     /**
-     * 
+     *
      */
     private Integer id;
 
@@ -82,14 +86,14 @@ public class ProductInfoDO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 
+     *
      */
     public Integer getId() {
         return id;
     }
 
     /**
-     * 
+     *
      */
     public void setId(Integer id) {
         this.id = id;
@@ -290,19 +294,19 @@ public class ProductInfoDO implements Serializable {
         }
         ProductInfoDO other = (ProductInfoDO) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getProductName() == null ? other.getProductName() == null : this.getProductName().equals(other.getProductName()))
-            && (this.getRate() == null ? other.getRate() == null : this.getRate().equals(other.getRate()))
-            && (this.getCycle() == null ? other.getCycle() == null : this.getCycle().equals(other.getCycle()))
-            && (this.getReleaseTime() == null ? other.getReleaseTime() == null : this.getReleaseTime().equals(other.getReleaseTime()))
-            && (this.getProductType() == null ? other.getProductType() == null : this.getProductType().equals(other.getProductType()))
-            && (this.getProductNo() == null ? other.getProductNo() == null : this.getProductNo().equals(other.getProductNo()))
-            && (this.getProductMoney() == null ? other.getProductMoney() == null : this.getProductMoney().equals(other.getProductMoney()))
-            && (this.getLeftProductMoney() == null ? other.getLeftProductMoney() == null : this.getLeftProductMoney().equals(other.getLeftProductMoney()))
-            && (this.getBidMinLimit() == null ? other.getBidMinLimit() == null : this.getBidMinLimit().equals(other.getBidMinLimit()))
-            && (this.getBidMaxLimit() == null ? other.getBidMaxLimit() == null : this.getBidMaxLimit().equals(other.getBidMaxLimit()))
-            && (this.getProductStatus() == null ? other.getProductStatus() == null : this.getProductStatus().equals(other.getProductStatus()))
-            && (this.getProductFullTime() == null ? other.getProductFullTime() == null : this.getProductFullTime().equals(other.getProductFullTime()))
-            && (this.getProductDesc() == null ? other.getProductDesc() == null : this.getProductDesc().equals(other.getProductDesc()));
+                && (this.getProductName() == null ? other.getProductName() == null : this.getProductName().equals(other.getProductName()))
+                && (this.getRate() == null ? other.getRate() == null : this.getRate().equals(other.getRate()))
+                && (this.getCycle() == null ? other.getCycle() == null : this.getCycle().equals(other.getCycle()))
+                && (this.getReleaseTime() == null ? other.getReleaseTime() == null : this.getReleaseTime().equals(other.getReleaseTime()))
+                && (this.getProductType() == null ? other.getProductType() == null : this.getProductType().equals(other.getProductType()))
+                && (this.getProductNo() == null ? other.getProductNo() == null : this.getProductNo().equals(other.getProductNo()))
+                && (this.getProductMoney() == null ? other.getProductMoney() == null : this.getProductMoney().equals(other.getProductMoney()))
+                && (this.getLeftProductMoney() == null ? other.getLeftProductMoney() == null : this.getLeftProductMoney().equals(other.getLeftProductMoney()))
+                && (this.getBidMinLimit() == null ? other.getBidMinLimit() == null : this.getBidMinLimit().equals(other.getBidMinLimit()))
+                && (this.getBidMaxLimit() == null ? other.getBidMaxLimit() == null : this.getBidMaxLimit().equals(other.getBidMaxLimit()))
+                && (this.getProductStatus() == null ? other.getProductStatus() == null : this.getProductStatus().equals(other.getProductStatus()))
+                && (this.getProductFullTime() == null ? other.getProductFullTime() == null : this.getProductFullTime().equals(other.getProductFullTime()))
+                && (this.getProductDesc() == null ? other.getProductDesc() == null : this.getProductDesc().equals(other.getProductDesc()));
     }
 
     @Override

@@ -1,16 +1,20 @@
 package com.bjpowernode.db.domain;
 
+import com.baomidou.mybatisplus.annotation.TableName;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
 /**
  * 收益记录表
+ *
  * @TableName b_income_record
  */
+@TableName("b_income_record")
 public class IncomeRecordDO implements Serializable {
     /**
-     * 
+     *
      */
     private Integer id;
 
@@ -52,14 +56,14 @@ public class IncomeRecordDO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 
+     *
      */
     public Integer getId() {
         return id;
     }
 
     /**
-     * 
+     *
      */
     public void setId(Integer id) {
         this.id = id;
@@ -176,13 +180,13 @@ public class IncomeRecordDO implements Serializable {
         }
         IncomeRecordDO other = (IncomeRecordDO) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getUid() == null ? other.getUid() == null : this.getUid().equals(other.getUid()))
-            && (this.getProdId() == null ? other.getProdId() == null : this.getProdId().equals(other.getProdId()))
-            && (this.getBidId() == null ? other.getBidId() == null : this.getBidId().equals(other.getBidId()))
-            && (this.getBidMoney() == null ? other.getBidMoney() == null : this.getBidMoney().equals(other.getBidMoney()))
-            && (this.getIncomeDate() == null ? other.getIncomeDate() == null : this.getIncomeDate().equals(other.getIncomeDate()))
-            && (this.getIncomeMoney() == null ? other.getIncomeMoney() == null : this.getIncomeMoney().equals(other.getIncomeMoney()))
-            && (this.getIncomeStatus() == null ? other.getIncomeStatus() == null : this.getIncomeStatus().equals(other.getIncomeStatus()));
+                && (this.getUid() == null ? other.getUid() == null : this.getUid().equals(other.getUid()))
+                && (this.getProdId() == null ? other.getProdId() == null : this.getProdId().equals(other.getProdId()))
+                && (this.getBidId() == null ? other.getBidId() == null : this.getBidId().equals(other.getBidId()))
+                && (this.getBidMoney() == null ? other.getBidMoney() == null : this.getBidMoney().equals(other.getBidMoney()))
+                && (this.getIncomeDate() == null ? other.getIncomeDate() == null : this.getIncomeDate().equals(other.getIncomeDate()))
+                && (this.getIncomeMoney() == null ? other.getIncomeMoney() == null : this.getIncomeMoney().equals(other.getIncomeMoney()))
+                && (this.getIncomeStatus() == null ? other.getIncomeStatus() == null : this.getIncomeStatus().equals(other.getIncomeStatus()));
     }
 
     @Override

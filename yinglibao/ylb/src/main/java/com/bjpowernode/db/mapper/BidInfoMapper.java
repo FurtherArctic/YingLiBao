@@ -1,6 +1,9 @@
 package com.bjpowernode.db.mapper;
 
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.bjpowernode.db.domain.BidInfoDO;
+import org.springframework.stereotype.Component;
 
 /**
 * @author wangj
@@ -8,7 +11,8 @@ import com.bjpowernode.db.domain.BidInfoDO;
 * @createDate 2022-11-07 19:12:37
 * @Entity com.bjpowernode.db.domain.BidInfo
 */
-public interface BidInfoMapper {
+@Component
+public interface BidInfoMapper extends BaseMapper<BidInfoDO> {
 
     int deleteByPrimaryKey(Long id);
 
