@@ -5,10 +5,7 @@ import com.bjpowernode.web.service.AppService;
 import com.bjpowernode.web.struct.CommonResult;
 import com.bjpowernode.web.struct.dto.BaseInfoDTO;
 import com.bjpowernode.web.struct.vo.BaseInfoVO;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import org.springframework.data.convert.ReadingConverter;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,11 +34,14 @@ public class AppController {
      *
      * @return dto
      */
-    @ApiOperation(value = "", notes = "")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "appService",value = "",dataType = "int")
-    }
-    )
+    @ApiOperation(value = "三项数据", notes = "三项基本数据：用户数量，累计投资金额，平均利率")
+    @ApiResponses({
+            @ApiResponse(code = 200,message = "请求成功",response = CommonResult.class),
+            @ApiResponse(code = 401,message = "不能访问系统"),
+            @ApiResponse(code =403,message="权限不足"),
+            @ApiResponse(code =404,message="找不到服务器"),
+            @ApiResponse(code = 500,message = "服务器错误，请联系张三")
+    })
     @RequestMapping("/app/base/info")
     public CommonResult getBaseInfo() {
         BaseInfoDTO baseInfoDTO = appService.queryBaseInfo();

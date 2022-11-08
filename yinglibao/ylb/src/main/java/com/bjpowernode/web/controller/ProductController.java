@@ -6,7 +6,7 @@ import com.bjpowernode.web.service.ProductsService;
 import com.bjpowernode.web.struct.CommonResult;
 import com.bjpowernode.web.struct.dto.ThreeTypeProductsDTO;
 import com.bjpowernode.web.struct.vo.ProductVO;
-import io.swagger.annotations.Api;
+import io.swagger.annotations.*;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,7 +29,15 @@ public class ProductController {
     /**
      * @return
      */
+    @ApiOperation(value = "查询产品信息",notes = "一个新手宝，三个优选，三个散标")
     @RequestMapping("/products/three")
+    @ApiResponses({
+            @ApiResponse(code = 200,message = "请求成功",response = CommonResult.class),
+            @ApiResponse(code = 401,message = "不能访问系统"),
+            @ApiResponse(code =403,message="权限不足"),
+            @ApiResponse(code =404,message="找不到服务器"),
+            @ApiResponse(code = 500,message = "服务器错误，请联系张三")
+    })
     public CommonResult getThreeProducts() {
 
         ThreeTypeProductsDTO threeTypeProductsDTO = productsService.queryPageByProductType();
