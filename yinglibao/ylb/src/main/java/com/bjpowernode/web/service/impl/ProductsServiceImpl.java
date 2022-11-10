@@ -29,6 +29,5 @@ public class ProductsServiceImpl implements ProductsService {
         //散标
         List<ProductInfoDO> bulkList = productInfoMapper.selectPageByProductType(AppConsts.PRODUCT_TYPE_BULK, 0, 3);
         return new ThreeTypeProductsDTO(newList, goodList, bulkList);
-
     }
 }

@@ -1,12 +1,14 @@
 package com.bjpowernode.web.controller;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.bjpowernode.db.domain.ProductInfoDO;
 import com.bjpowernode.web.service.ProductsService;
 import com.bjpowernode.web.struct.CommonResult;
 import com.bjpowernode.web.struct.dto.ThreeTypeProductsDTO;
 import com.bjpowernode.web.struct.vo.ProductVO;
-import io.swagger.annotations.*;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -42,12 +44,19 @@ public class ProductController {
 
         ThreeTypeProductsDTO threeTypeProductsDTO = productsService.queryPageByProductType();
 
-        //DTO转换为VO
+        /*
+         * DTO转换为VO
+         * DTO中的数据都是集合，而VO中的数据是字段属性，因此不能使用copyProperties直接复制
+         * 而是使用hutool工具库中BeanUtil.copyToList方法
+         * 此方法可以复制集合中的Bean属性，遍历集合中每个Bean，复制其对应属性后加入一个新的List中。
+         * 形参:collection – 原Bean集合 targetType – 目标Bean类型
+         * 返回值:复制后的List
+         */
         List<ProductVO> newList = BeanUtil.copyToList(threeTypeProductsDTO.getNewList(), ProductVO.class);
         List<ProductVO> goodList = BeanUtil.copyToList(threeTypeProductsDTO.getGoodList(), ProductVO.class);
         List<ProductVO> bulkList = BeanUtil.copyToList(threeTypeProductsDTO.getBulkList(), ProductVO.class);
 
-        //封装数据
+        //以上获得了三组集合数据，将其添加到map集合中，然后封装到CommonResult
         Map<String, Object> data = new HashMap<>();
         data.put("newList", newList);
         data.put("goodList", goodList);

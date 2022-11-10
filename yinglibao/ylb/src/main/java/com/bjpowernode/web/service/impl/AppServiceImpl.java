@@ -10,7 +10,6 @@ import com.bjpowernode.web.service.AppService;
 import com.bjpowernode.web.struct.dto.BaseInfoDTO;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 
 /**
  * @author wangjunchen
@@ -30,18 +29,18 @@ public class AppServiceImpl implements AppService {
 
     @Override
     public BaseInfoDTO queryBaseInfo() {
+        //用户数量
         Long counts = userMapper.selectUserCounts();
-
         //利率
         QueryWrapper<ProductInfoDO> con = new QueryWrapper<>();
         con.select(" round(avg(rate),2) as rate");
         ProductInfoDO product = productInfoMapper.selectOne(con);
-
         //总投资额
         QueryWrapper<BidInfoDO> wrapper = new QueryWrapper<>();
         wrapper.select("sum(bid_money) as bid_money");
         BidInfoDO bidInfo = bidInfoMapper.selectOne(wrapper);
 
+        //链式编程，数据封装到BaseInfoDTO对象中
         return BaseInfoDTO.builder().registerUserCount(counts).sumBidMoney(bidInfo.getBidMoney()).avgRate(product.getRate()).build();
     }
 }

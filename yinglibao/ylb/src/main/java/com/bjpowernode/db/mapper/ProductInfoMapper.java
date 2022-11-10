@@ -29,6 +29,14 @@ public interface ProductInfoMapper extends BaseMapper<ProductInfoDO> {
 
     int updateByPrimaryKey(ProductInfoDO record);
 
+    /**
+     * 查询数据，根据类型，先按时间倒序，然后利率倒序
+     *
+     * @param type   产品类型
+     * @param offset 查询起始下标
+     * @param rows   查询的数据数量
+     * @return List<ProductInfoDO> 数据集合
+     */
     List<ProductInfoDO> selectPageByProductType(@Param("type") Integer type,
                                                 @Param("offset") Integer offset,
                                                 @Param("rows") Integer rows);

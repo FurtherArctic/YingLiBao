@@ -29,6 +29,12 @@ public class CommonResult {
     @ApiModelProperty(name = "info", value = "详细信息")
     private Object info;
 
+    /**
+     * 成功时的应答结果
+     *
+     * @param info 详细信息
+     * @return 应答结果
+     */
     public static CommonResult success(Object info) {
         CommonResult commonResult = new CommonResult();
         commonResult.setCode(RCode.SUCCESS.getCode());
@@ -37,6 +43,11 @@ public class CommonResult {
         return commonResult;
     }
 
+    /**
+     * 失败时的应答结果
+     *
+     * @return 应答结果
+     */
     public static CommonResult failure() {
         CommonResult commonResult = new CommonResult();
         commonResult.setCode(RCode.FAILURE.getCode());

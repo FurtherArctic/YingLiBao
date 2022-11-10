@@ -45,9 +45,10 @@ public class AppController {
     @RequestMapping("/app/base/info")
     public CommonResult getBaseInfo() {
         BaseInfoDTO baseInfoDTO = appService.queryBaseInfo();
-        //将service提供的DTO数据转换为提供给vue的VO数据，copyProperties只适用于同名属性拷贝
+        //使用hutool工具库提供的BeanUtil类将service提供的DTO数据转换为提供给vue的VO数据，copyProperties只适用于属性一一对应的两个类中间数据拷贝
         BaseInfoVO baseInfoVO = BeanUtil.copyProperties(baseInfoDTO, BaseInfoVO.class);
 
+        //CommonResult类封装数据
         return CommonResult.success(baseInfoVO);
     }
 }
