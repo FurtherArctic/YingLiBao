@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author wangjunchen
@@ -25,5 +26,14 @@ public class RedisAssist {
      */
     public Set<ZSetOperations.TypedTuple<String>> getReverseFromZSet(String key, int start, int end) {
         return stringRedisTemplate.boundZSetOps(key).reverseRangeWithScores(start, end);
+    }
+
+    public boolean addString(String key, String value, int minute) {
+        stringRedisTemplate.opsForValue().set(key, value, minute, TimeUnit.MINUTES);
+        Boolean b = stringRedisTemplate.hasKey(key);
+        if ((b != null)) {
+            return b.booleanValue();
+        }
+        return false;
     }
 }

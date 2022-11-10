@@ -6,9 +6,10 @@ import lombok.Data;
  * @author wangjunchen
  */
 public enum RCode {
-    SUCCESS(1,"请求成功"),
-    FAILURE(-1,"请求失败")
-    ;
+    SUCCESS(1, "请求成功"),
+    FAILURE(-1, "请求失败"),
+    PHONE_FORMAT_ERROR(-1001, "手机号格式不正确"),
+    SMS_SEND_ERROR(-1002, "验证码发送失败");
     /**
      *
      */

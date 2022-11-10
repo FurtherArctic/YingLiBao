@@ -29,3 +29,7 @@ server:
   servlet:
     context-path: /api
 
+sms:
+  url: https://way.jd.com/chuangxin/dxjk
+  appkey: 831bcdbfe85ff1d4fd66623e4ad61465
+  reg-text: 【动力金融】你的注册验证码是%s，请注意保护，3分钟有效

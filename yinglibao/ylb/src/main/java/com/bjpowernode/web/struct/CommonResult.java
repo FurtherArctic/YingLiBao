@@ -55,4 +55,9 @@ public class CommonResult {
         commonResult.setInfo("");
         return commonResult;
     }
+
+    public void setRCode(RCode rCode) {
+        this.code = rCode.getCode();
+        this.msg = rCode.getText();
+    }
 }

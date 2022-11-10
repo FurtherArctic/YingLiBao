@@ -1,5 +1,6 @@
 package com.bjpowernode.web.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.bjpowernode.common.consts.AppConsts;
 import com.bjpowernode.db.domain.ProductInfoDO;
 import com.bjpowernode.db.mapper.ProductInfoMapper;
@@ -29,5 +30,19 @@ public class ProductsServiceImpl implements ProductsService {
         //散标
         List<ProductInfoDO> bulkList = productInfoMapper.selectPageByProductType(AppConsts.PRODUCT_TYPE_BULK, 0, 3);
         return new ThreeTypeProductsDTO(newList, goodList, bulkList);
+    }
+
+    @Override
+    public List<ProductInfoDO> findPageByProductType(Integer productType, Integer pageNo) {
+
+        int offset = (pageNo - 1) * AppConsts.PAGE_SIZE;
+        return productInfoMapper.selectPageByProductType(productType, offset, AppConsts.PAGE_SIZE);
+    }
+
+    @Override
+    public Long countByProductType(Integer productType) {
+        QueryWrapper<ProductInfoDO> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("product_type", productType);
+        return productInfoMapper.selectCount(queryWrapper);
     }
 }
