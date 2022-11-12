@@ -36,4 +36,23 @@ public class RedisAssist {
         }
         return false;
     }
+
+    /**
+     * 检查key是否存在
+     */
+    public boolean exists(String key) {
+        Boolean hasKey = stringRedisTemplate.hasKey(key);
+        if (hasKey != null) {
+            return hasKey.booleanValue();
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * 获取string类型key的值
+     */
+    public String getString(String key) {
+        return stringRedisTemplate.opsForValue().get(key);
+    }
 }

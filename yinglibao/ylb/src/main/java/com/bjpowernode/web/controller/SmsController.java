@@ -26,6 +26,12 @@ public class SmsController {
     public CommonResult sendSmsReg(@RequestParam String phone) {
         CommonResult commonResult = CommonResult.failure();
         if (PhoneUtil.isPhone(phone)) {
+            //如果验证码有效，继续使用，不重新发送
+            if (smsService.checkValidCodeReg(phone)) {
+                commonResult.setRCode(RCode.SMS_CODE_USE);
+                return commonResult;
+            }
+            //发送短信
             RCode rCode = smsService.sendSmsREG(phone);
             commonResult.setRCode(rCode);
         } else {

@@ -56,6 +56,14 @@ public class CommonResult {
         return commonResult;
     }
 
+    public static CommonResult failure(RCode rCode) {
+        CommonResult commonResult = new CommonResult();
+        commonResult.setCode(RCode.FAILURE.getCode());
+        commonResult.setMsg(RCode.FAILURE.getText());
+        commonResult.setInfo("");
+        return commonResult;
+    }
+
     public void setRCode(RCode rCode) {
         this.code = rCode.getCode();
         this.msg = rCode.getText();

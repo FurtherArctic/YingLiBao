@@ -1,7 +1,6 @@
 package com.bjpowernode.web.struct.dto;
 
 import com.bjpowernode.db.domain.ProductInfoDO;
-import jdk.jfr.Label;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

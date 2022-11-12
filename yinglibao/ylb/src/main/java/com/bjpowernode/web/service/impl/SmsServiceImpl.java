@@ -76,4 +76,22 @@ public class SmsServiceImpl implements SmsService {
         System.out.println("注册验证码：" + code);
         return rCode;
     }
+
+    @Override
+    public boolean checkValidCodeReg(String phone) {
+        String key = RedisKey.SMS_CODE_REG + phone;
+        return redisAssist.exists(key);
+    }
+
+    @Override
+    public boolean checkCodeReg(String phone, String code) {
+        String key = RedisKey.SMS_CODE_REG + phone;
+        if (redisAssist.exists(key)) {
+            String saveCode = redisAssist.getString(key);
+            if (code.equals(saveCode)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

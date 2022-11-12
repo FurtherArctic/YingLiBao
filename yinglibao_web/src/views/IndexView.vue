@@ -252,10 +252,10 @@ export default {
       this.appInfo = resp.data.info;
     })
 
-    doGet('/products/three').then(resp => {
-      this.newList = resp.data.info.newList;
-      this.goodList = resp.data.info.goodList;
-      this.bulkList = resp.data.info.bulkList;
+    doGet('/products/three').then(a => {
+      this.newList = a.data.info.newList;
+      this.goodList = a.data.info.goodList;
+      this.bulkList = a.data.info.bulkList;
     })
   },
   methods: {

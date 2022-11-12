@@ -30,7 +30,7 @@ public class AppServiceImpl implements AppService {
     @Override
     public BaseInfoDTO queryBaseInfo() {
         //用户数量
-        Long counts = userMapper.selectUserCounts();
+        Long counts = userMapper.selectCount(null);
         //利率
         QueryWrapper<ProductInfoDO> con = new QueryWrapper<>();
         con.select(" round(avg(rate),2) as rate");
