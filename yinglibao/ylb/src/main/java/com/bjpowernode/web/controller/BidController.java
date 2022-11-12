@@ -24,18 +24,19 @@ public class BidController {
     @Resource
     private BidService bidService;
 
-    @ApiOperation(value = "投资排行榜",notes = "投资金额最高的用户排行，手机号脱敏处理")
+    @ApiOperation(value = "投资排行榜", notes = "投资金额最高的用户排行，手机号脱敏处理")
     @ApiResponses({
-            @ApiResponse(code = 200,message = "请求成功",response = CommonResult.class),
-            @ApiResponse(code = 401,message = "不能访问系统"),
-            @ApiResponse(code =403,message="权限不足"),
-            @ApiResponse(code =404,message="找不到服务器"),
-            @ApiResponse(code = 500,message = "服务器错误，请联系张三")
+            @ApiResponse(code = 200, message = "请求成功", response = CommonResult.class),
+            @ApiResponse(code = 401, message = "不能访问系统"),
+            @ApiResponse(code = 403, message = "权限不足"),
+            @ApiResponse(code = 404, message = "找不到服务器"),
+            @ApiResponse(code = 500, message = "服务器错误，请联系张三")
     })
     @RequestMapping("/bid/rank")
     public CommonResult showBidMoneyRank() {
+        //获取来自service层的投资排行数据BidRankDTO
         List<BidRankDTO> bidMoneyRanks = bidService.getBidMoneyRanks();
-
+        //将BidRankDTO数据转为BidRankVO类型数据提供到前端接口
         List<BidRankVO> bidRankVOS = BeanUtil.copyToList(bidMoneyRanks, BidRankVO.class);
         return CommonResult.success(bidRankVOS);
     }

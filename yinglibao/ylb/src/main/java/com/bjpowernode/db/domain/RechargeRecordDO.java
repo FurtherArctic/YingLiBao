@@ -4,13 +4,16 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
+
+import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
-import lombok.Data;
 
 /**
  * 充值记录表
+ * @author wangjunchen
  * @TableName b_recharge_record
  */
 @TableName(value ="b_recharge_record")
@@ -64,6 +67,7 @@ public class RechargeRecordDO implements Serializable {
     @TableField(value = "channel")
     private String channel;
 
+    @Serial
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 }

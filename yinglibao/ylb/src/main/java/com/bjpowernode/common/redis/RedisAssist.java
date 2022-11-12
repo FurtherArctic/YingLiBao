@@ -9,6 +9,8 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * Redis工具类
+ *
  * @author wangjunchen
  */
 @Component
@@ -28,29 +30,44 @@ public class RedisAssist {
         return stringRedisTemplate.boundZSetOps(key).reverseRangeWithScores(start, end);
     }
 
+    /**
+     * 往redis添加String类型的数据
+     *
+     * @param key    key值
+     * @param value  value值
+     * @param minute 过期时间
+     * @return boolean值，是否添加成功
+     */
     public boolean addString(String key, String value, int minute) {
         stringRedisTemplate.opsForValue().set(key, value, minute, TimeUnit.MINUTES);
         Boolean b = stringRedisTemplate.hasKey(key);
         if ((b != null)) {
-            return b.booleanValue();
+            return b;
         }
         return false;
     }
 
     /**
      * 检查key是否存在
+     *
+     * @param key key
+     * @return boolean
      */
     public boolean exists(String key) {
         Boolean hasKey = stringRedisTemplate.hasKey(key);
+        //noinspection ReplaceNullCheck
         if (hasKey != null) {
-            return hasKey.booleanValue();
+            return hasKey;
         } else {
             return false;
         }
     }
 
     /**
-     * 获取string类型key的值
+     * 获取string类型key的value
+     *
+     * @param key key
+     * @return value值
      */
     public String getString(String key) {
         return stringRedisTemplate.opsForValue().get(key);

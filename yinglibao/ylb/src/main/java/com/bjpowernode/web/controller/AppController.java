@@ -5,12 +5,14 @@ import com.bjpowernode.web.service.AppService;
 import com.bjpowernode.web.struct.CommonResult;
 import com.bjpowernode.web.struct.dto.BaseInfoDTO;
 import com.bjpowernode.web.struct.vo.BaseInfoVO;
-import io.swagger.annotations.*;
-import org.springframework.data.convert.ReadingConverter;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.management.NotificationEmitter;
+import javax.annotation.Resource;
 
 /**
  * tags 给api接口，分组名称，默认当前controller中所有接口都属于tags分组
@@ -21,11 +23,8 @@ import javax.management.NotificationEmitter;
 @Api(tags = "应用程序基本信息接口")
 @RestController
 public class AppController {
+    @Resource
     private AppService appService;
-
-    public AppController(AppService appService) {
-        this.appService = appService;
-    }
 
     /**
      * 注解@ApiOperation表示接口的功能
@@ -36,11 +35,11 @@ public class AppController {
      */
     @ApiOperation(value = "三项数据", notes = "三项基本数据：用户数量，累计投资金额，平均利率")
     @ApiResponses({
-            @ApiResponse(code = 200,message = "请求成功",response = CommonResult.class),
-            @ApiResponse(code = 401,message = "不能访问系统"),
-            @ApiResponse(code =403,message="权限不足"),
-            @ApiResponse(code =404,message="找不到服务器"),
-            @ApiResponse(code = 500,message = "服务器错误，请联系张三")
+            @ApiResponse(code = 200, message = "请求成功", response = CommonResult.class),
+            @ApiResponse(code = 401, message = "不能访问系统"),
+            @ApiResponse(code = 403, message = "权限不足"),
+            @ApiResponse(code = 404, message = "找不到服务器"),
+            @ApiResponse(code = 500, message = "服务器错误，请联系张三")
     })
     @RequestMapping("/app/base/info")
     public CommonResult getBaseInfo() {

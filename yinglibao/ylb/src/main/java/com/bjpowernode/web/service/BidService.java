@@ -10,8 +10,9 @@ import java.util.List;
 
 public interface BidService {
     /**
+     * 获取投资排行榜
      *
-     * @return
+     * @return BidRankDTO对象
      */
     List<BidRankDTO> getBidMoneyRanks();
 }

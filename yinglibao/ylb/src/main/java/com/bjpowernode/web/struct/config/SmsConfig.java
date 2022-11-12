@@ -14,4 +14,5 @@ public class SmsConfig {
     private String url;
     private String appkey;
     private String regText;
+    private String loginText;
 }

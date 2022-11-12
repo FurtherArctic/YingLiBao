@@ -20,14 +20,18 @@ public class BidServiceImpl implements BidService {
     @Resource
     private RedisAssist redisAssist;
 
+    /**
+     * 获取投资排行前三位，手机号和投资额，手机号注意脱敏处理，保护用户隐私
+     *
+     * @return BidRankDTO对象
+     */
     @Override
     public List<BidRankDTO> getBidMoneyRanks() {
         Set<ZSetOperations.TypedTuple<String>> sets =
                 redisAssist.getReverseFromZSet(RedisKey.BID_MONEY_RANK, 0, 2);
-        List<BidRankDTO> rankList = new ArrayList<BidRankDTO>();
-        sets.forEach(rank -> {
-            rankList.add(new BidRankDTO(rank.getValue(), rank.getScore()));
-        });
+        List<BidRankDTO> rankList = new ArrayList<>();
+        sets.forEach(rank ->
+                rankList.add(new BidRankDTO(rank.getValue(), rank.getScore())));
         return rankList;
     }
 }

@@ -3,7 +3,7 @@ package com.bjpowernode.common.consts;
 /**
  * @author wangjunchen
  */
-public class AppConsts {
+public class AppConstants {
     /**
      * 产品类型
      */

@@ -4,12 +4,15 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
+
+import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import lombok.Data;
 
 /**
  * 用户财务资金账户表
+ * @author wangj
  * @TableName u_finance_account
  */
 @TableName(value ="u_finance_account")
@@ -33,6 +36,7 @@ public class FinanceAccountDO implements Serializable {
     @TableField(value = "available_money")
     private BigDecimal availableMoney;
 
+    @Serial
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 }

@@ -2,22 +2,36 @@ package com.bjpowernode.web.struct.request;
 
 import cn.hutool.core.util.PhoneUtil;
 import lombok.Data;
-import org.springframework.scheduling.annotation.Scheduled;
 
 /**
+ * 注册和登录参数类
+ *
  * @author wangjunchen
  */
 @Data
 public class UserParam {
+    /**
+     * 手机号
+     */
     private String phone;
-    private String secret;
+    /**
+     * 密码
+     */
+    private String password;
+    /**
+     * 验证码
+     */
     private String code;
 
+    /**
+     * 检查注册参数是否符合要求
+     * 1.手机号格式正确
+     * 2.密码不为空，且为32位MD5值
+     * 验证码不为空且为4位数字
+     *
+     * @return boolean
+     */
     public boolean checkData() {
-        if (PhoneUtil.isPhone(phone) && (secret != null && secret.length() == 32) && (code != null && code.length() == 4)) {
-            return true;
-        } else {
-            return false;
-        }
+        return PhoneUtil.isPhone(phone) && (password != null && password.length() == 32) && (code != null && code.length() == 4);
     }
 }

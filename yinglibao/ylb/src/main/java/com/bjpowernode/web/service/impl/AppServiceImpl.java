@@ -10,22 +10,26 @@ import com.bjpowernode.web.service.AppService;
 import com.bjpowernode.web.struct.dto.BaseInfoDTO;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
+
 
 /**
  * @author wangjunchen
  */
 @Service
 public class AppServiceImpl implements AppService {
+    @Resource
     private UserMapper userMapper;
+    @Resource
     private ProductInfoMapper productInfoMapper;
+    @Resource
     private BidInfoMapper bidInfoMapper;
 
-
-    public AppServiceImpl(UserMapper userMapper, ProductInfoMapper productInfoMapper, BidInfoMapper bidInfoMapper) {
-        this.userMapper = userMapper;
-        this.productInfoMapper = productInfoMapper;
-        this.bidInfoMapper = bidInfoMapper;
-    }
+    /**
+     * 从数据库中获取三项数据
+     *
+     * @return BaseInfoDTO
+     */
 
     @Override
     public BaseInfoDTO queryBaseInfo() {

@@ -4,12 +4,15 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
+
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
-import lombok.Data;
 
 /**
  * 用户表
+ * @author wangjunchen
  * @TableName u_user
  */
 @TableName(value ="u_user")
@@ -63,6 +66,7 @@ public class UserDO implements Serializable {
     @TableField(value = "header_image")
     private String headerImage;
 
+    @Serial
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 }

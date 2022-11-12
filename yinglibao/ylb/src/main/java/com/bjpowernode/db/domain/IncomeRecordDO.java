@@ -4,13 +4,16 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
+
+import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
-import lombok.Data;
 
 /**
  * 收益记录表
+ * @author wangj
  * @TableName b_income_record
  */
 @TableName(value ="b_income_record")
@@ -64,6 +67,7 @@ public class IncomeRecordDO implements Serializable {
     @TableField(value = "income_status")
     private Integer incomeStatus;
 
+    @Serial
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 }

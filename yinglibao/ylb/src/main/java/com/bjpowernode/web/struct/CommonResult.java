@@ -44,7 +44,7 @@ public class CommonResult {
     }
 
     /**
-     * 失败时的应答结果
+     * 失败时的应答结果，统一应答信息为请求失败
      *
      * @return 应答结果
      */
@@ -56,10 +56,14 @@ public class CommonResult {
         return commonResult;
     }
 
+    /**
+     * 失败时的应答结果，但是应答信息具体
+     * @param rCode 枚举信息
+     * @return commonResult对象
+     */
     public static CommonResult failure(RCode rCode) {
         CommonResult commonResult = new CommonResult();
-        commonResult.setCode(RCode.FAILURE.getCode());
-        commonResult.setMsg(RCode.FAILURE.getText());
+        commonResult.setRCode(rCode);
         commonResult.setInfo("");
         return commonResult;
     }
