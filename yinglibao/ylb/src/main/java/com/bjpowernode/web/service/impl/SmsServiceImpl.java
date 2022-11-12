@@ -36,7 +36,8 @@ public class SmsServiceImpl implements SmsService {
     @Override
     public boolean checkValidCodeReg(String phone) {
         String key = RedisKey.SMS_CODE_REG + phone;
-        return redisAssist.exists(key);
+        boolean result = redisAssist.exists(key);
+        return result;
     }
 
     /**
@@ -49,7 +50,8 @@ public class SmsServiceImpl implements SmsService {
     @Override
     public boolean checkValidCodeLogin(String phone) {
         String key = RedisKey.SMS_CODE_LOGIN + phone;
-        return redisAssist.exists(key);
+        boolean result = redisAssist.exists(key);
+        return result;
     }
 
     /**
@@ -74,19 +76,7 @@ public class SmsServiceImpl implements SmsService {
         paramMap.put("content", template);
         paramMap.put("appkey", smsConfig.getAppkey());
         //发出去，获取发送结果的json
-        String response = "{\n" +
-                "    \"code\": \"10000\",\n" +
-                "    \"charge\": false,\n" +
-                "    \"remain\": 1305,\n" +
-                "    \"msg\": \"查询成功\",\n" +
-                "    \"result\": {\n" +
-                "        \"ReturnStatus\": \"Success\",\n" +
-                "        \"Message\": \"ok\",\n" +
-                "        \"RemainPoint\": 420842,\n" +
-                "        \"TaskID\": 18424321,\n" +
-                "        \"SuccessCounts\": 1\n" +
-                "    }\n" +
-                "}";
+        String response = "{\n" + "    \"code\": \"10000\",\n" + "    \"charge\": false,\n" + "    \"remain\": 1305,\n" + "    \"msg\": \"查询成功\",\n" + "    \"result\": {\n" + "        \"ReturnStatus\": \"Success\",\n" + "        \"Message\": \"ok\",\n" + "        \"RemainPoint\": 420842,\n" + "        \"TaskID\": 18424321,\n" + "        \"SuccessCounts\": 1\n" + "    }\n" + "}";
         if (StrUtil.isNotBlank(response)) {
             //5.解析json
             JSONObject object = JSONUtil.parseObj(response);
@@ -121,19 +111,7 @@ public class SmsServiceImpl implements SmsService {
         paramMap.put("appkey", smsConfig.getAppkey());
 
         //发出去，获取发送结果的json
-        String response = "{\n" +
-                "    \"code\": \"10000\",\n" +
-                "    \"charge\": false,\n" +
-                "    \"remain\": 1305,\n" +
-                "    \"msg\": \"查询成功\",\n" +
-                "    \"result\": {\n" +
-                "        \"ReturnStatus\": \"Success\",\n" +
-                "        \"Message\": \"ok\",\n" +
-                "        \"RemainPoint\": 420842,\n" +
-                "        \"TaskID\": 18424321,\n" +
-                "        \"SuccessCounts\": 1\n" +
-                "    }\n" +
-                "}";
+        String response = "{\n" + "    \"code\": \"10000\",\n" + "    \"charge\": false,\n" + "    \"remain\": 1305,\n" + "    \"msg\": \"查询成功\",\n" + "    \"result\": {\n" + "        \"ReturnStatus\": \"Success\",\n" + "        \"Message\": \"ok\",\n" + "        \"RemainPoint\": 420842,\n" + "        \"TaskID\": 18424321,\n" + "        \"SuccessCounts\": 1\n" + "    }\n" + "}";
         if (StrUtil.isNotBlank(response)) {
             //5.解析json
             JSONObject object = JSONUtil.parseObj(response);
@@ -142,7 +120,7 @@ public class SmsServiceImpl implements SmsService {
                 String returnStatus = object.getJSONObject("result").getStr("ReturnStatus");
                 if ("Success".equals(returnStatus)) {
                     //6.存储短信验证码到redis，设置10分钟有效
-                    String key = RedisKey.SMS_CODE_REG + phone;
+                    String key = RedisKey.SMS_CODE_LOGIN + phone;
                     if (redisAssist.addString(key, code, 10)) {
                         rCode = RCode.SUCCESS;
                     }
