@@ -68,6 +68,11 @@ export default {
     AppHeader,
     AppFooter
   },
+  //导航守卫，路由改变，组件复用
+  beforeRouteUpdate(to){
+    this.productType=to.query.pType;
+    this.loadPage(1);
+  },
   data() {
     return {
       bidRank: [{
