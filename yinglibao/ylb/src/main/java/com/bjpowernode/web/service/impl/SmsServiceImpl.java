@@ -2,7 +2,6 @@ package com.bjpowernode.web.service.impl;
 
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.bjpowernode.common.RCode;
@@ -11,7 +10,6 @@ import com.bjpowernode.common.redis.RedisKey;
 import com.bjpowernode.web.service.SmsService;
 import com.bjpowernode.web.struct.config.SmsConfig;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
@@ -36,8 +34,7 @@ public class SmsServiceImpl implements SmsService {
     @Override
     public boolean checkValidCodeReg(String phone) {
         String key = RedisKey.SMS_CODE_REG + phone;
-        boolean result = redisAssist.exists(key);
-        return result;
+        return redisAssist.exists(key);
     }
 
     /**
@@ -50,8 +47,7 @@ public class SmsServiceImpl implements SmsService {
     @Override
     public boolean checkValidCodeLogin(String phone) {
         String key = RedisKey.SMS_CODE_LOGIN + phone;
-        boolean result = redisAssist.exists(key);
-        return result;
+        return redisAssist.exists(key);
     }
 
     /**
@@ -76,7 +72,20 @@ public class SmsServiceImpl implements SmsService {
         paramMap.put("content", template);
         paramMap.put("appkey", smsConfig.getAppkey());
         //发出去，获取发送结果的json
-        String response = "{\n" + "    \"code\": \"10000\",\n" + "    \"charge\": false,\n" + "    \"remain\": 1305,\n" + "    \"msg\": \"查询成功\",\n" + "    \"result\": {\n" + "        \"ReturnStatus\": \"Success\",\n" + "        \"Message\": \"ok\",\n" + "        \"RemainPoint\": 420842,\n" + "        \"TaskID\": 18424321,\n" + "        \"SuccessCounts\": 1\n" + "    }\n" + "}";
+        String response = """
+                {
+                    "code": "10000",
+                    "charge": false,
+                    "remain": 1305,
+                    "msg": "查询成功",
+                    "result": {
+                        "ReturnStatus": "Success",
+                        "Message": "ok",
+                        "RemainPoint": 420842,
+                        "TaskID": 18424321,
+                        "SuccessCounts": 1
+                    }
+                }""";
         if (StrUtil.isNotBlank(response)) {
             //5.解析json
             JSONObject object = JSONUtil.parseObj(response);
@@ -111,7 +120,20 @@ public class SmsServiceImpl implements SmsService {
         paramMap.put("appkey", smsConfig.getAppkey());
 
         //发出去，获取发送结果的json
-        String response = "{\n" + "    \"code\": \"10000\",\n" + "    \"charge\": false,\n" + "    \"remain\": 1305,\n" + "    \"msg\": \"查询成功\",\n" + "    \"result\": {\n" + "        \"ReturnStatus\": \"Success\",\n" + "        \"Message\": \"ok\",\n" + "        \"RemainPoint\": 420842,\n" + "        \"TaskID\": 18424321,\n" + "        \"SuccessCounts\": 1\n" + "    }\n" + "}";
+        String response = """
+                {
+                    "code": "10000",
+                    "charge": false,
+                    "remain": 1305,
+                    "msg": "查询成功",
+                    "result": {
+                        "ReturnStatus": "Success",
+                        "Message": "ok",
+                        "RemainPoint": 420842,
+                        "TaskID": 18424321,
+                        "SuccessCounts": 1
+                    }
+                }""";
         if (StrUtil.isNotBlank(response)) {
             //5.解析json
             JSONObject object = JSONUtil.parseObj(response);
@@ -153,6 +175,29 @@ public class SmsServiceImpl implements SmsService {
             }
         }
         //否则验证码无效，返回false
+        return false;
+    }
+
+    /**
+     * 验证登录时用户提供的验证码与系统发送的验证码是否匹配
+     *
+     * @param phone 手机号
+     * @param code  验证码
+     * @return boolean
+     */
+    @Override
+    public boolean checkCodeLogin(String phone, String code) {
+        //获取key
+        String key = RedisKey.SMS_CODE_LOGIN + phone;
+        if (redisAssist.exists(key)) {
+            //key若是存在，则获取该key对应的value值
+            String saveCode = redisAssist.getString(key);
+            //redis中的value值和用户提供的value值是否匹配
+            if (code.equals(saveCode)) {
+                //匹配返回true，表示用户使用的验证码有效
+                return true;
+            }
+        }
         return false;
     }
 }

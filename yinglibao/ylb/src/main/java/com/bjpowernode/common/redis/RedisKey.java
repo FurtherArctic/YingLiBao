@@ -18,4 +18,9 @@ public class RedisKey {
      * 登录验证码
      */
     public static final String SMS_CODE_LOGIN = "SMS:LOGIN:";
+
+    /**
+     * 登录令牌token
+     */
+    public static final String TOKEN_LOGIN = "TOKEN:LOGIN:";
 }

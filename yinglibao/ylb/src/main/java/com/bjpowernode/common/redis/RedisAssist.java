@@ -1,10 +1,12 @@
 package com.bjpowernode.common.redis;
 
+import org.springframework.data.redis.core.BoundHashOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -71,5 +73,39 @@ public class RedisAssist {
      */
     public String getString(String key) {
         return stringRedisTemplate.opsForValue().get(key);
+    }
+
+    /**
+     * redis添加hash类型的数据
+     *
+     * @param key    key
+     * @param data   值，map类型
+     * @param minute 有效时间
+     * @return boolean
+     */
+    public boolean addHash(String key, Map<String, String> data, int minute) {
+        boolean result = false;
+        BoundHashOperations<String, Object, Object> hashOps = stringRedisTemplate.boundHashOps(key);
+        hashOps.putAll(data);
+        Boolean expire = hashOps.expire(minute, TimeUnit.MINUTES);
+        if (expire != null) {
+            result = expire;
+        }
+        return result;
+    }
+
+    /**
+     * 从redis数据库中获取对应的field中的value值
+     *
+     * @param key   hash的key
+     * @param field field
+     * @return field的value
+     */
+    public String getFieldHash(String key, String field) {
+        Object o = stringRedisTemplate.opsForHash().get(key, field);
+        if (o != null) {
+            return o.toString();
+        }
+        return null;
     }
 }

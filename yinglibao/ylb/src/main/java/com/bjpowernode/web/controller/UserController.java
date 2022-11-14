@@ -1,6 +1,9 @@
 package com.bjpowernode.web.controller;
 
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.IdUtil;
 import com.bjpowernode.common.RCode;
+import com.bjpowernode.db.domain.UserDO;
 import com.bjpowernode.web.service.SmsService;
 import com.bjpowernode.web.service.UserService;
 import com.bjpowernode.web.struct.CommonResult;
@@ -12,6 +15,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author wangjunchen
@@ -37,7 +43,8 @@ public class UserController {
         //创建默认值
         CommonResult commonResult = CommonResult.failure(RCode.REQUEST_PARAM_ERROR);
         //1.检查参数格式，是否符合要求
-        if (param.checkData()) {
+        boolean b=param.checkData(4);
+        if (b) {
             //2.检查短信验证码是否有效（与redis中存储的验证码作比较）
             boolean checkCodeReg = smsService.checkCodeReg(param.getPhone(), param.getCode());
             if (checkCodeReg) {
@@ -52,4 +59,59 @@ public class UserController {
         }
         return commonResult;
     }
+
+    @SuppressWarnings("AlibabaUndefineMagicConstant")
+    @ApiOperation(value = "用户登录", notes = "通过手机号，验证码和密码登录账号")
+    @PostMapping("/user/login")
+    public CommonResult userLogin(@RequestBody UserParam param) {
+        //默认结果，参数检查失败
+        CommonResult commonResult = CommonResult.failure(RCode.REQUEST_PARAM_ERROR);
+        if (param.checkData(6)) {
+            //执行登录
+            //1.验证短信验证码
+            boolean check = smsService.checkCodeLogin(param.getPhone(), param.getCode());
+            if (check) {
+                //2. 验证用户信息是否有效，通过前端返回的手机号，密码等信息去数据库查询匹配
+                UserDO userDO = userService.userLogin(param);
+                //3. 判断登陆结果
+                if (userDO != null) {
+                    //登录成功，生成token，此处采用UUID
+                    String token = IdUtil.simpleUUID();
+
+                    //4. 存储token-redis,使用hash类型，有效时间1小时
+                    Map<String, String> redisData = new HashMap<>(10);
+                    redisData.put("uid", String.valueOf(userDO.getId()));
+                    redisData.put("name", userDO.getName());
+                    redisData.put("loginTime", DateUtil.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
+
+                    boolean saved = userService.saveTokenRedis(token, redisData);
+
+                    if (saved) {
+                        //5. 返回token给请求方，以及userid，name，phone等数据
+                        Map<String, String> responseData = new HashMap<>(10);
+                        responseData.put("uid", String.valueOf(userDO.getId()));
+                        responseData.put("phone", userDO.getPhone());
+                        responseData.put("name", userDO.getName());
+                        responseData.put("token", token);
+                        //请求成功返回数据
+                        commonResult = CommonResult.success(responseData);
+                    }
+                } else {
+                    //登陆失败，用户名或者密码错误
+                    commonResult.setRCode(RCode.USER_NAME_PASSWORD_INVALID);
+                }
+            } else {
+                //验证码无效
+                commonResult.setRCode(RCode.SMS_CODE_INVALID);
+            }
+        }
+        return commonResult;
+    }
+
+    @ApiOperation(value = "实名认证")
+    @PostMapping("/user/realname")
+    public CommonResult userRealName() {
+        return CommonResult.success("");
+    }
+
 }

@@ -17,7 +17,7 @@ public class UserParam {
     /**
      * 密码
      */
-    private String password;
+    private String secret;
     /**
      * 验证码
      */
@@ -31,7 +31,7 @@ public class UserParam {
      *
      * @return boolean
      */
-    public boolean checkData() {
-        return PhoneUtil.isPhone(phone) && (password != null && password.length() == 32) && (code != null && code.length() == 4);
+    public boolean checkData(int len) {
+        return PhoneUtil.isPhone(phone) && (secret != null && secret.length() == 32) && (code != null && code.length() == len);
     }
 }

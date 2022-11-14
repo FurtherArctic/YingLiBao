@@ -48,6 +48,14 @@ public interface SmsService {
      * @return boolean
      */
     boolean checkCodeReg(String phone, String code);
+    /**
+     * 登录功能验证码是否有效
+     *
+     * @param phone 手机号
+     * @param code  验证码
+     * @return boolean
+     */
+    boolean checkCodeLogin(String phone, String code);
 
 
 }

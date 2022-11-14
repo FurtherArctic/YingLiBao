@@ -19,7 +19,10 @@ public enum RCode {
     //手机号已经被注册过
     PHONE_EXIST_ERROR(-1004, "手机号已注册"),
     //验证码无效，需要重新获取
-    SMS_CODE_INVALID(-1005, "验证码无效");
+    SMS_CODE_INVALID(-1005, "验证码无效"),
+    //登录信息无效，通常是用户名或者密码不正确
+    USER_NAME_PASSWORD_INVALID(-1006, "登录信息无效"),
+    FAIL_TOKEN_INVALID(2000, "token无效");
     /**
      * 状态码
      */
