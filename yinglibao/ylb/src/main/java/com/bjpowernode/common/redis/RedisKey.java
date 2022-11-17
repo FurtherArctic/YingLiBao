@@ -23,4 +23,8 @@ public class RedisKey {
      * 登录令牌token
      */
     public static final String TOKEN_LOGIN = "TOKEN:LOGIN:";
+    /**
+     * uid和token
+     */
+    public static final String TOKEN_UID = "TOKEN:UID:";
 }

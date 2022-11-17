@@ -34,4 +34,24 @@ public interface UserService {
      * @return boolean
      */
     boolean saveTokenRedis(String token, Map<String, String> redisData);
+
+    UserDO queryById(Integer uid);
+
+    RCode doRealName(Integer uid, String name, String idCard);
+
+    /**
+     * 存储uid和token
+     *
+     * @param token token
+     * @param id    用户id
+     */
+    void saveUidTokenRedis(String token, Integer id);
+
+    /**
+     * 获取已存在的token
+     *
+     * @param id 用户
+     * @return token
+     */
+    String getTokenForUid(Integer id);
 }

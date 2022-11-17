@@ -22,31 +22,33 @@ public enum RCode {
     SMS_CODE_INVALID(-1005, "验证码无效"),
     //登录信息无效，通常是用户名或者密码不正确
     USER_NAME_PASSWORD_INVALID(-1006, "登录信息无效"),
-    FAIL_TOKEN_INVALID(2000, "token无效");
+    //不能重复认证
+    REALNAME_EXIST(1006, "不能重复认证"),
+    //实名认证失败
+    REALNAME_FAILURE(1006, "不能重复认证"),
+    ACCOUNT_NOT_EXITS(1110, "资金账号不存在"),
+    ACCOUNT_MONEY_NOT_ENOUGH(1111, "资金余额不足"),
+    PRODUCT_NOT_EXITS(1112, "理财产品不存在"),
+    PRODUCT_NOT_SELL(1113, "理财产品不可售卖"),
+    PRODUCT_LEFT_MONEY(1114, "剩余金额不足"),
+    INVEST_MONEY_RANGE(1115, "投资金额不符合要求"),
+    //token无效，需要重新登录
+    FAIL_TOKEN_INVALID(-1007, "请重新登录");
     /**
      * 状态码
      */
-    private Integer code;
+    private final Integer code;
     /**
      * 状态信息
      */
-    private String text;
+    private final String text;
 
     public Integer getCode() {
         return code;
     }
 
-    public void setCode(Integer code) {
-        this.code = code;
-    }
-
     public String getText() {
         return text;
-    }
-
-    @SuppressWarnings("unused")
-    public void setText(String text) {
-        this.text = text;
     }
 
     RCode(Integer code, String text) {

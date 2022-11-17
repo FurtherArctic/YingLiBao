@@ -37,3 +37,8 @@ sms:
 
 secret:
   salt: B%RN&F%b%jKz8v37E3k%buE@Z9$%y#ED
+
+
+realname:
+  url: https
+  appkey: 3680fa919b771148da626bbcbd459475

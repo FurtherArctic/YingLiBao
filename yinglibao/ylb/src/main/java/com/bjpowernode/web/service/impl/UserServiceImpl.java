@@ -1,6 +1,9 @@
 package com.bjpowernode.web.service.impl;
 
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.digest.DigestUtil;
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.bjpowernode.common.RCode;
 import com.bjpowernode.common.redis.RedisAssist;
@@ -10,6 +13,7 @@ import com.bjpowernode.db.domain.UserDO;
 import com.bjpowernode.db.mapper.FinanceAccountMapper;
 import com.bjpowernode.db.mapper.UserMapper;
 import com.bjpowernode.web.service.UserService;
+import com.bjpowernode.web.struct.config.RealNameConfig;
 import com.bjpowernode.web.struct.request.UserParam;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -18,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -33,6 +38,9 @@ public class UserServiceImpl implements UserService {
     FinanceAccountMapper financeAccountMapper;
     @Resource
     RedisAssist redisAssist;
+
+    @Resource
+    private RealNameConfig realNameConfig;
 
     /**
      * 注册账号
@@ -111,5 +119,100 @@ public class UserServiceImpl implements UserService {
         String key = RedisKey.TOKEN_LOGIN + token.toUpperCase();
         return redisAssist.addHash(key, redisData, 60);
 
+    }
+
+    @Override
+    public UserDO queryById(Integer uid) {
+
+        return userMapper.selectById(uid);
+    }
+
+    /**
+     * @param uid    用户id
+     * @param name   用户真实姓名
+     * @param idCard 身份证号
+     * @return 枚举值
+     */
+    @Override
+    public RCode doRealName(Integer uid, String name, String idCard) {
+        RCode rCode = RCode.REALNAME_FAILURE;
+        //调用第三方接口
+        boolean isok = executeHttpRequest(idCard, name);
+        if (isok) {
+            //更新数据库
+            UserDO user = new UserDO();
+            user.setId(uid);
+            user.setName(name);
+            user.setIdCard(idCard);
+
+            int rows = userMapper.updateById(user);
+            if (rows > 0) {
+                rCode = RCode.SUCCESS;
+            }
+        }
+        return rCode;
+    }
+
+    @Override
+    public void saveUidTokenRedis(String token, Integer id) {
+        String key = RedisKey.TOKEN_UID + id;
+        redisAssist.addString(key, token, 60);
+    }
+
+    /**
+     * 获取当前id之前登录时生成的已存在的token
+     *
+     * @param id 用户
+     * @return token
+     */
+    @Override
+    public String getTokenForUid(Integer id) {
+        String key = RedisKey.TOKEN_UID + id;
+        return redisAssist.getString(key);
+    }
+
+    /**
+     * 私有方法，不允许外部调用
+     *
+     * @param idCard 身份证号
+     * @param name   姓名
+     * @return boolean
+     */
+    private synchronized boolean executeHttpRequest(String idCard, String name) {
+        boolean isok = false;
+        Map<String, Object> param = new HashMap<>(20);
+        param.put("cardNo", idCard);
+        param.put("realName", name);
+        param.put("appkey", realNameConfig.getAppkey());
+        try {
+
+            String response = "{\n" +
+                    "    \"code\": \"10000\",\n" +
+                    "    \"charge\": false,\n" +
+                    "    \"remain\": 1305,\n" +
+                    "    \"msg\": \"查询成功\",\n" +
+                    "    \"result\": {\n" +
+                    "        \"error_code\": 0,\n" +
+                    "        \"reason\": \"成功\",\n" +
+                    "        \"result\": {\n" +
+                    "            \"realname\": \"张三\",\n" +
+                    "            \"idcard\": \"350721197702134399\",\n" +
+                    "            \"isok\": true\n" +
+                    "        }\n" +
+                    "    }\n" +
+                    "}";
+            if (StrUtil.isNotBlank(response)) {
+                JSONObject entity = JSONUtil.parseObj(response);
+                if ("10000".equals(entity.getStr("code"))) {
+                    JSONObject result = entity.getJSONObject("result").getJSONObject("result");
+                    if ("true".equalsIgnoreCase(result.getStr("isok"))) {
+                        isok = true;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return isok;
     }
 }

@@ -1,10 +1,8 @@
 package com.bjpowernode.web.settings;
 
 import com.bjpowernode.common.redis.RedisAssist;
-import com.bjpowernode.web.interceptor.TokenInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.annotation.Resource;
@@ -23,13 +21,13 @@ public class WebMvcSettings implements WebMvcConfigurer {
      *
      * @param registry 注册拦截器
      */
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        TokenInterceptor tokenInterceptor = new TokenInterceptor(redisAssist);
-        String[] addPath = {"/user/realname"};
-        registry.addInterceptor(tokenInterceptor)
-                .addPathPatterns(addPath);
-    }
+//    @Override
+//    public void addInterceptors(InterceptorRegistry registry) {
+//        TokenInterceptor tokenInterceptor = new TokenInterceptor(redisAssist);
+//        String[] addPath = {"/user/realname"};
+//        registry.addInterceptor(tokenInterceptor)
+//                .addPathPatterns(addPath);
+//    }
 
     /**
      * 设置全局跨域处理

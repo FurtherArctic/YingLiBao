@@ -12,9 +12,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -99,6 +97,16 @@ public class ProductController {
             data.put("pageInfo", pageInfo);
             commonResult = CommonResult.success(data);
         }
+        return commonResult;
+    }
+
+    @ApiOperation(value = "")
+    @GetMapping
+    public CommonResult getProductDetail(@RequestParam Integer pid,
+                                         @RequestHeader(required = false) Integer uid) {
+        CommonResult commonResult = CommonResult.failure();
+        
+
         return commonResult;
     }
 }

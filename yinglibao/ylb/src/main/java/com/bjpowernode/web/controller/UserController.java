@@ -2,16 +2,19 @@ package com.bjpowernode.web.controller;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.StrUtil;
 import com.bjpowernode.common.RCode;
 import com.bjpowernode.db.domain.UserDO;
 import com.bjpowernode.web.service.SmsService;
 import com.bjpowernode.web.service.UserService;
 import com.bjpowernode.web.struct.CommonResult;
+import com.bjpowernode.web.struct.request.RealNameParam;
 import com.bjpowernode.web.struct.request.UserParam;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -43,7 +46,7 @@ public class UserController {
         //创建默认值
         CommonResult commonResult = CommonResult.failure(RCode.REQUEST_PARAM_ERROR);
         //1.检查参数格式，是否符合要求
-        boolean b=param.checkData(4);
+        boolean b = param.checkData(4);
         if (b) {
             //2.检查短信验证码是否有效（与redis中存储的验证码作比较）
             boolean checkCodeReg = smsService.checkCodeReg(param.getPhone(), param.getCode());
@@ -75,18 +78,27 @@ public class UserController {
                 UserDO userDO = userService.userLogin(param);
                 //3. 判断登陆结果
                 if (userDO != null) {
-                    //登录成功，生成token，此处采用UUID
-                    String token = IdUtil.simpleUUID();
-
-                    //4. 存储token-redis,使用hash类型，有效时间1小时
-                    Map<String, String> redisData = new HashMap<>(10);
-                    redisData.put("uid", String.valueOf(userDO.getId()));
-                    redisData.put("name", userDO.getName());
-                    redisData.put("loginTime", DateUtil.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
-
-                    boolean saved = userService.saveTokenRedis(token, redisData);
-
+                    //登录成功，生成token，此处采用UUID生成token
+                    String token;
+                    boolean saved = false;
+                    //先从redis中获取Token
+                    String savedToken = userService.getTokenForUid(userDO.getId());
+                    //如果redis中已经有token则使用已有token，没有则新建并存储
+                    if (StrUtil.isNotBlank(savedToken)) {
+                        token = savedToken;
+                        saved = true;
+                    } else {
+                        token = IdUtil.simpleUUID();
+                        //4. 存储token-redis,使用hash类型，有效时间1小时
+                        Map<String, String> redisData = new HashMap<>(10);
+                        redisData.put("uid", String.valueOf(userDO.getId()));
+                        redisData.put("name", userDO.getName());
+                        redisData.put("loginTime", DateUtil.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
+                        saved = userService.saveTokenRedis(token, redisData);
+                    }
                     if (saved) {
+                        //把登录的UID和token使用String类型存储起来
+                        userService.saveUidTokenRedis(token.toUpperCase(), userDO.getId());
                         //5. 返回token给请求方，以及userid，name，phone等数据
                         Map<String, String> responseData = new HashMap<>(10);
                         responseData.put("uid", String.valueOf(userDO.getId()));
@@ -110,8 +122,23 @@ public class UserController {
 
     @ApiOperation(value = "实名认证")
     @PostMapping("/user/realname")
-    public CommonResult userRealName() {
-        return CommonResult.success("");
+    public CommonResult userRealName(@RequestBody RealNameParam realNameParam, @RequestHeader(value = "uid") Integer uid) {
+        CommonResult commonResult = CommonResult.failure();
+        if (realNameParam.checkData() && uid > 0) {
+            //1.检查是否做过实名认证
+            UserDO userDO = userService.queryById(uid);
+            if (userDO != null) {
+                //需要实名认证
+                RCode rCode = userService.doRealName(uid, realNameParam.getName(), realNameParam.getIdCard());
+                commonResult.setRCode(rCode);
+            } else {
+                //不需要实名认证
+                commonResult.setRCode(RCode.REALNAME_EXIST);
+            }
+        } else {
+            commonResult.setRCode(RCode.REQUEST_PARAM_ERROR);
+        }
+        return commonResult;
     }
 
 }
