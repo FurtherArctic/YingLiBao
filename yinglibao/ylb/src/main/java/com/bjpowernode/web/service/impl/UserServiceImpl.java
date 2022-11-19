@@ -2,6 +2,7 @@ package com.bjpowernode.web.service.impl;
 
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.digest.DigestUtil;
+import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -118,16 +119,22 @@ public class UserServiceImpl implements UserService {
     public boolean saveTokenRedis(String token, Map<String, String> redisData) {
         String key = RedisKey.TOKEN_LOGIN + token.toUpperCase();
         return redisAssist.addHash(key, redisData, 60);
-
     }
 
+    /**
+     * 通过id获取用户信息
+     *
+     * @param uid 用户id
+     * @return userDo
+     */
     @Override
     public UserDO queryById(Integer uid) {
-
         return userMapper.selectById(uid);
     }
 
     /**
+     * 验证实名信息是否正确，若正确则将此实名信息存储到数据库中
+     *
      * @param uid    用户id
      * @param name   用户真实姓名
      * @param idCard 身份证号
@@ -139,12 +146,11 @@ public class UserServiceImpl implements UserService {
         //调用第三方接口
         boolean isok = executeHttpRequest(idCard, name);
         if (isok) {
-            //更新数据库
             UserDO user = new UserDO();
             user.setId(uid);
             user.setName(name);
             user.setIdCard(idCard);
-
+            //更新数据库
             int rows = userMapper.updateById(user);
             if (rows > 0) {
                 rCode = RCode.SUCCESS;
@@ -153,6 +159,12 @@ public class UserServiceImpl implements UserService {
         return rCode;
     }
 
+    /**
+     * 将uid和token以String类型存入到redis中
+     *
+     * @param token token
+     * @param id    用户id
+     */
     @Override
     public void saveUidTokenRedis(String token, Integer id) {
         String key = RedisKey.TOKEN_UID + id;
@@ -172,7 +184,7 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * 私有方法，不允许外部调用
+     * 私有方法，不允许外部调用，调用第三方接口进行实名信息的查询和认证
      *
      * @param idCard 身份证号
      * @param name   姓名
@@ -185,24 +197,34 @@ public class UserServiceImpl implements UserService {
         param.put("realName", name);
         param.put("appkey", realNameConfig.getAppkey());
         try {
+            /* 通常情况下需要使用hutool工具库提供的HttpUtil类获取应答结果，
+             * 即使用此类将url路径https://way.jd.com/youhuoBeijing/test?cardNo=150429198407091210&realName=张三&appkey=申请的appkey
+             * 获取到的结果中的数据解析出来
+             * 解析出的数据格式和下面的demoResponse格式相同，当解析的code为10000时表示查询成功
+             * 但是此项业务需要购买，使用demoResponse示例演示即可
+             */
 
-            String response = "{\n" +
-                    "    \"code\": \"10000\",\n" +
-                    "    \"charge\": false,\n" +
-                    "    \"remain\": 1305,\n" +
-                    "    \"msg\": \"查询成功\",\n" +
-                    "    \"result\": {\n" +
-                    "        \"error_code\": 0,\n" +
-                    "        \"reason\": \"成功\",\n" +
-                    "        \"result\": {\n" +
-                    "            \"realname\": \"张三\",\n" +
-                    "            \"idcard\": \"350721197702134399\",\n" +
-                    "            \"isok\": true\n" +
-                    "        }\n" +
-                    "    }\n" +
-                    "}";
-            if (StrUtil.isNotBlank(response)) {
-                JSONObject entity = JSONUtil.parseObj(response);
+            String realResponse = HttpUtil.get(realNameConfig.getUrl(), param);
+            String demoResponse = """
+                    {
+                        "code": "10000",
+                        "charge": false,
+                        "remain": 1305,
+                        "msg": "查询成功",
+                        "result": {
+                            "error_code": 0,
+                            "reason": "成功",
+                            "result": {
+                                "realname": "张三",
+                                "idcard": "350721197702134399",
+                                "isok": true
+                            }
+                        }
+                    }""";
+            //解析的数据不为空
+            if (StrUtil.isNotBlank(demoResponse)) {
+                //使用hutool工具库中的JSONObject将解析的demoResponse数据封装成一个map集合对象
+                JSONObject entity = JSONUtil.parseObj(demoResponse);
                 if ("10000".equals(entity.getStr("code"))) {
                     JSONObject result = entity.getJSONObject("result").getJSONObject("result");
                     if ("true".equalsIgnoreCase(result.getStr("isok"))) {

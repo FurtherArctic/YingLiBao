@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "realname.url",
+      "type": "java.lang.String",
+      "description": "Description for realname.url."
+  }
+] }

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
  * @author wangjunchen
  */
 @Component
-@ConfigurationProperties(prefix = "")
+@ConfigurationProperties(prefix = "realname")
 @Data
 public class RealNameConfig {
     private String url;

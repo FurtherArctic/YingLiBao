@@ -63,24 +63,31 @@ public class UserController {
         return commonResult;
     }
 
+    /**
+     * 用户登录，前端提供手机号，验证码，密码，去数据库以及redis查询相关数据是否匹配
+     * 非首次登录需要验证token，首次验证需要生成token，用户相关操作都要使用token验证
+     *
+     * @param userParam 用户信息
+     * @return commonResult
+     */
     @SuppressWarnings("AlibabaUndefineMagicConstant")
     @ApiOperation(value = "用户登录", notes = "通过手机号，验证码和密码登录账号")
     @PostMapping("/user/login")
-    public CommonResult userLogin(@RequestBody UserParam param) {
+    public CommonResult userLogin(@RequestBody UserParam userParam) {
         //默认结果，参数检查失败
         CommonResult commonResult = CommonResult.failure(RCode.REQUEST_PARAM_ERROR);
-        if (param.checkData(6)) {
+        if (userParam.checkData(6)) {
             //执行登录
             //1.验证短信验证码
-            boolean check = smsService.checkCodeLogin(param.getPhone(), param.getCode());
+            boolean check = smsService.checkCodeLogin(userParam.getPhone(), userParam.getCode());
             if (check) {
                 //2. 验证用户信息是否有效，通过前端返回的手机号，密码等信息去数据库查询匹配
-                UserDO userDO = userService.userLogin(param);
+                UserDO userDO = userService.userLogin(userParam);
                 //3. 判断登陆结果
                 if (userDO != null) {
                     //登录成功，生成token，此处采用UUID生成token
                     String token;
-                    boolean saved = false;
+                    boolean saved;
                     //先从redis中获取Token
                     String savedToken = userService.getTokenForUid(userDO.getId());
                     //如果redis中已经有token则使用已有token，没有则新建并存储
@@ -120,6 +127,13 @@ public class UserController {
         return commonResult;
     }
 
+    /**
+     * 实名认证
+     *
+     * @param realNameParam 实名信息
+     * @param uid           用户id
+     * @return commonResult
+     */
     @ApiOperation(value = "实名认证")
     @PostMapping("/user/realname")
     public CommonResult userRealName(@RequestBody RealNameParam realNameParam, @RequestHeader(value = "uid") Integer uid) {
@@ -127,13 +141,17 @@ public class UserController {
         if (realNameParam.checkData() && uid > 0) {
             //1.检查是否做过实名认证
             UserDO userDO = userService.queryById(uid);
+            //判断用户是否存在
             if (userDO != null) {
-                //需要实名认证
-                RCode rCode = userService.doRealName(uid, realNameParam.getName(), realNameParam.getIdCard());
-                commonResult.setRCode(rCode);
-            } else {
-                //不需要实名认证
-                commonResult.setRCode(RCode.REALNAME_EXIST);
+                //判断用户姓名是否为空，为空表示没有实名认证
+                if (StrUtil.isBlank(userDO.getName())) {
+                    //需要实名认证
+                    RCode rCode = userService.doRealName(uid, realNameParam.getName(), realNameParam.getIdCard());
+                    commonResult.setRCode(rCode);
+                } else {
+                    //不需要实名认证
+                    commonResult.setRCode(RCode.REALNAME_EXIST);
+                }
             }
         } else {
             commonResult.setRCode(RCode.REQUEST_PARAM_ERROR);

@@ -25,7 +25,7 @@ public enum RCode {
     //不能重复认证
     REALNAME_EXIST(1006, "不能重复认证"),
     //实名认证失败
-    REALNAME_FAILURE(1006, "不能重复认证"),
+    REALNAME_FAILURE(1006, "实名认证失败"),
     ACCOUNT_NOT_EXITS(1110, "资金账号不存在"),
     ACCOUNT_MONEY_NOT_ENOUGH(1111, "资金余额不足"),
     PRODUCT_NOT_EXITS(1112, "理财产品不存在"),
